@@ -1,2 +1,2 @@
 # pocketbase-uploader
-Node de Node-Red para crear o actualizar registros en PocketBase (es un firebase opensource)
+Node para userse en Node-Red para crear o actualizar registros en PocketBase (es un firebase onpremise opensource)
