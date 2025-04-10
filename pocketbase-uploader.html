@@ -1,0 +1,78 @@
+<script type="text/javascript">
+    RED.nodes.registerType('pocketbase-uploader', {
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            baseUrl: { value: "http://localhost:8090", required: true },
+            user: { value: "", required: true },
+            pass: { value: "", required: true },
+            collection: { value: "", required: true },
+            method: { value: "create", required: true }  <!-- NUEVO -->
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "file.png",
+        label: function() {
+            return this.name || "PocketBase Uploader";
+        },
+        labelStyle: { color: "#000", "font-weight": "bold" }
+    });
+</script>
+
+<script type="text/html" data-template-name="pocketbase-uploader">
+    <div class="form-row">
+        <label for="node-input-name">
+            <i class="fa fa-tag"></i> Name
+        </label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-baseUrl">
+            <i class="fa fa-globe"></i> Base URL
+        </label>
+        <input type="text" id="node-input-baseUrl" placeholder="http://localhost:8090">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-user">
+            <i class="fa fa-user"></i> User
+        </label>
+        <input type="text" id="node-input-user" placeholder="admin@example.com">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-pass">
+            <i class="fa fa-lock"></i> Password
+        </label>
+        <input type="password" id="node-input-pass" placeholder="password">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-collection">
+            <i class="fa fa-database"></i> Collection
+        </label>
+        <input type="text" id="node-input-collection" placeholder="Nombre o ID de la colección">
+    </div>
+
+    <!-- NUEVO: campo combobox para definir método (create o update) -->
+    <div class="form-row">
+        <label for="node-input-method">
+            <i class="fa fa-cogs"></i> Method
+        </label>
+        <select id="node-input-method">
+            <option value="create">Create</option>
+            <option value="update">Update</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="pocketbase-uploader">
+    <h2>PocketBase Uploader</h2>
+    <p>
+        Sube datos (<code>msg.payload</code>) a PocketBase usando las credenciales y URL configuradas.
+        <br>
+        Puedes elegir el método <b>create</b> o <b>update</b> para la colección.
+    </p>
+</script>

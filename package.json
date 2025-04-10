@@ -1,0 +1,19 @@
+{
+  "name": "node-red-contrib-pocketbase-uploader",
+  "version": "1.0.0",
+  "description": "Un nodo personalizado de Node-RED para subir datos a PocketBase.",
+  "keywords": [
+    "node-red",
+    "pocketbase"
+  ],
+  "node-red": {
+    "nodes": {
+      "pocketbase-uploader": "pocketbase-uploader.js"
+    }
+  },
+  "dependencies": {
+    "pocketbase": "^0.14.0" 
+  },
+  "author": "Carlos Zelaya <carzel@gmail.com>",
+  "license": "MIT"
+}
