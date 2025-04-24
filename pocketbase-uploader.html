@@ -3,12 +3,14 @@
         category: 'function',
         color: '#a6bbcf',
         defaults: {
-            name: { value: "" },
+            name: { value: "PocketBase Uploader" },
             baseUrl: { value: "http://localhost:8090", required: true },
             user: { value: "", required: true },
             pass: { value: "", required: true },
-            collection: { value: "", required: true },
-            method: { value: "create", required: true }  <!-- NUEVO -->
+            collection: { value: "mycollection", required: true },
+            method: { value: "create", required: true }, 
+            keycolumn: { value: "mycolumn", required: true },
+           
         },
         inputs: 1,
         outputs: 1,
@@ -39,7 +41,7 @@
         <label for="node-input-user">
             <i class="fa fa-user"></i> User
         </label>
-        <input type="text" id="node-input-user" placeholder="admin@example.com">
+        <input type="text" id="node-input-user" placeholder="admin">
     </div>
 
     <div class="form-row">
@@ -55,7 +57,7 @@
         </label>
         <input type="text" id="node-input-collection" placeholder="Nombre o ID de la colección">
     </div>
-
+    
     <!-- NUEVO: campo combobox para definir método (create o update) -->
     <div class="form-row">
         <label for="node-input-method">
@@ -64,8 +66,16 @@
         <select id="node-input-method">
             <option value="create">Create</option>
             <option value="update">Update</option>
+           
         </select>
     </div>
+    <div class="form-row">
+        <label for="node-input-keycolumn">
+            <i class="fa fa-key"></i> Key column Collection
+        </label>
+        <input type="text" id="node-input-keycolumn" placeholder="Campo llave de la colección">
+    </div>
+ 
 </script>
 
 <script type="text/x-red" data-help-name="pocketbase-uploader">

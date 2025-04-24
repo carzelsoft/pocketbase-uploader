@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-pocketbase-uploader",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Un nodo personalizado de Node-RED para subir datos a PocketBase.",
   "keywords": [
     "node-red",

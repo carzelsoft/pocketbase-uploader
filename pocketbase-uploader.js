@@ -16,7 +16,8 @@ module.exports = function(RED) {
         node.user = config.user;
         node.pass = config.pass;
         node.collection = config.collection;
-        node.method = config.method;  // <-- Nuevo: aquí guardamos el método
+        node.method = config.method;  
+        node.keycolumn = config.keycolumn;
 
         node.on('input', async (msg, send, done) => {
             if (!msg.payload) {
@@ -41,25 +42,41 @@ module.exports = function(RED) {
                 let result;
                 if (node.method === "create") {
                     // 1) CREATE un nuevo registro 
+                    for (const j of msg.payload) {
                     result = await pb
                       .collection(node.collection)
-                      .create(msg.payload);
+                      .create(j);
+                    }
 
-                } else if (node.method === "update") {
+                }
+                
+                else if (node.method === "update") {
                     // 2) UPDATE del primer registro de la colección
                     //    Obtenemos la primera página, 1 registro por página
                     const records = await pb
                       .collection(node.collection)
-                      .getList(1, 1); // page=1, perPage=1
+                      .getFullList(); 
                       
-                    if (!records.items || records.items.length === 0) {
+                    if (!records || records.length === 0) {
                         throw new Error("No hay registros en la colección para actualizar.");
                     }
 
-                    const firstRecord = records.items[0];
-                    result = await pb
-                      .collection(node.collection)
-                      .update(firstRecord.id, msg.payload);
+                  
+                    
+                      
+                      for (const i of records) {
+                        for (const j of msg.payload) {
+                         
+                            if(i[node.keycolumn]==j[node.keycolumn]){
+
+                              const recordId = i.id;  // El id del registro actual en PocketBase                            
+                                result = await pb
+                                .collection(node.collection)
+                                .update(recordId, j);
+                            }
+                      }
+                    }
+
                 } else {
                     throw new Error(`Método no soportado: ${node.method}`);
                 }
