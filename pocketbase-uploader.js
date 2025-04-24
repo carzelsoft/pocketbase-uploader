@@ -16,7 +16,6 @@ module.exports = function(RED) {
         node.user = config.user;
         node.pass = config.pass;
         node.collection = config.collection;
-        node.method = config.method;  
         node.keycolumn = config.keycolumn;
 
         node.on('input', async (msg, send, done) => {
@@ -39,20 +38,8 @@ module.exports = function(RED) {
                   .collection('users')
                   .authWithPassword(node.user, node.pass);
 
-                let result;
-                if (node.method === "create") {
-                    // 1) CREATE un nuevo registro 
-                    for (const j of msg.payload) {
-                    result = await pb
-                      .collection(node.collection)
-                      .create(j);
-                    }
-
-                }
-                
-                else if (node.method === "update") {
-                    // 2) UPDATE del primer registro de la colección
-                    //    Obtenemos la primera página, 1 registro por página
+                let result;              
+           
                     const records = await pb
                       .collection(node.collection)
                       .getFullList(); 
@@ -61,25 +48,35 @@ module.exports = function(RED) {
                         throw new Error("No hay registros en la colección para actualizar.");
                     }
 
-                  
+                  //TO UPDATE O CREATE
+                    for (const j of msg.payload) {
+                      const existingRecord = records.find(i => i[node.keycolumn] === j[node.keycolumn]);
                     
-                      
-                      for (const i of records) {
-                        for (const j of msg.payload) {
-                         
-                            if(i[node.keycolumn]==j[node.keycolumn]){
-
-                              const recordId = i.id;  // El id del registro actual en PocketBase                            
-                                result = await pb
-                                .collection(node.collection)
-                                .update(recordId, j);
-                            }
+                      if (existingRecord) {
+                        const recordId = existingRecord.id; // El id del registro actual en PocketBase
+                        result = await pb
+                          .collection(node.collection)
+                          .update(recordId, j);
+                      } else {
+                        result = await pb
+                          .collection(node.collection)
+                          .create(j);
                       }
                     }
+                    
+                    //TO DELETE ELEMENT
+                    for (const j of records) {
+                      const existingRecord =msg.payload.find(i => i[node.keycolumn] === j[node.keycolumn]);
 
-                } else {
-                    throw new Error(`Método no soportado: ${node.method}`);
-                }
+                      if (!existingRecord) {                        
+                        result = await pb
+                          .collection(node.collection)
+                          .delete(j.id);
+                      } 
+                    }
+
+
+               
 
                 // Guardamos la respuesta final
                 msg.pocketbase = result;
