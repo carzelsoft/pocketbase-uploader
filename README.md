@@ -7,3 +7,9 @@ NODE-RED (https://nodered.org/)
 
 publicado aqui:
 https://flows.nodered.org/node/node-red-contrib-pocketbase-uploader
+https://www.npmjs.com/package/node-red-contrib-pocketbase-uploader
+
+
+NOTA:
+datos de entrada deben de venir de una funcion asi:
+return [{ payload:msg.payload.rows }];
